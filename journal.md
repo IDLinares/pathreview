@@ -6,7 +6,9 @@
 
 **Tier:** [ ] Tier 1 [x] Tier 2 [ ] Tier 3
 
-I have experience with React and TypeScript, and I am familiar with the basics of web development, as well as have worked in shared codebases before, so this tier 2 issue feels like a good fit for me.
+I have experience with React and TypeScript, and I am familiar with the basics of web development, as well as have worked in shared codebases before, so I believe I am experienced enough for a tier 2 issue.
+
+I also recognize I will have to create a new route (API endpoint) in `reviews.py` to handle the link generation, connect it to a service that actually creates the link, and then add a physical button to the UI on the `ReviewPage` that calls that service.
 
 **Problem summary:**
 The issue is requesting a button be added to the UI that allows the user to create a link they can share with others of their review summary. The link should be to a read-only version of their review summary that does not require authentication and expires after 30 days. The button should say "Copy Link" and be placed on the review sumamry page of the app.
