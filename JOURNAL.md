@@ -21,10 +21,12 @@ The issue is requesting a button be added to the UI that allows the user to crea
 
 ## Week 8 — Reproduction & solution planning
 
-**Reproduction commit link:** [link to commit documenting the reproduced issue]
+**Reproduction commit link:** https://github.com/IDLinares/pathreview/commit/c6fcdba8ec3f64edd09c970569163cd309517543
 
 **Reproduction summary:**
-[1–2 sentences: How did you reproduce the issue? What did you observe?]
+First, I manually tested the "Share" button that is currently available on the review page and saw it simply copied the URL of the current page, so it is not performing the intended functionality of creating a public link to the review page that expires after 30 days.
+
+As such, I created two new test files to test the functionality and implementation of this feature for when it is completed: a file for the eventual share service in the backend that creates the share link, and a file for the frontend that calls the share service and copies the link to the clipboard.
 
 **PLAN.md link:** [link to PLAN.md in your fork]
 
