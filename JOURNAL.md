@@ -28,9 +28,9 @@ First, I manually tested the "Share" button that is currently available on the r
 
 As such, I created two new test files to test the functionality and implementation of this feature for when it is completed: a file for the eventual share service in the backend that creates the share link, and a file for the frontend that calls the share service and copies the link to the clipboard.
 
-**PLAN.md link:** [link to PLAN.md in your fork]
+**PLAN.md link:** [PLAN.md](PLAN.md)
 
-**Walkthrough video (recommended):** [link to your Loom video, ≤2 min — recommended, not graded]
+**Walkthrough video (recommended):** No link
 
 **Blockers or open questions:**
-[Anything you're still uncertain about going into Week 9, or leave blank]
+No blockers or open questions.
