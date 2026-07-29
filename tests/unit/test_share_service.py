@@ -57,7 +57,7 @@ class TestCreateShareLink:
 
     def _setup_db(self, mock_db_session: AsyncMock, review: Mock | None) -> None:
         """Single execute: ownership-checked query returns the Review (or None)."""
-        result = AsyncMock()
+        result = Mock()
         result.scalars.return_value.first.return_value = review
         mock_db_session.execute.return_value = result
 
@@ -173,7 +173,7 @@ class TestGetPublicReview:
 
     def _setup_db(self, mock_db_session: AsyncMock, review: Mock | None) -> None:
         """Single execute: query Review by share_token."""
-        result = AsyncMock()
+        result = Mock()
         result.scalars.return_value.first.return_value = review
         mock_db_session.execute.return_value = result
 
