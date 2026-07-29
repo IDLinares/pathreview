@@ -40,13 +40,13 @@ No blockers or open questions.
 ### Check-in 1 (mid-week)
 
 **Current progress:**
-[What have you implemented so far? Which sub-tasks from PLAN.md are done?]
+I have implemented all of the backend functionality for the "Copy Link" button feature as documented in the [PLAN.md](PLAN.md) file. I updated the `Review` model to include new columns for the shareable link token and expiration date and well as performed the migration to add the new columns to the database. Also, two new async functions were created in `core/services/share_service.py` to handle the creation and retrieval of the shareable link. Lastly, two new routes were created: one in `api/routes/reviews.py` to handle the creation of the shareable link and another in `api/routes/public.py` to handle the retrieval of the public review summary along with schemas for the responses from the two new endpoints. Unit tests were also created and ran for this new service and all tests have passed.
 
 **Next steps:**
-[What are you working on for the rest of the week?]
+The rest of the week will be spent working on the frontend functionality, testing, and preparing the PR.
 
 **Blockers:**
-[Anything slowing you down? Or leave blank.]
+Since this is a full-stack feature, some changes have caused linter errors and warnings in areas downstream in files unrelated to the feature I am working on. I have had to work around them by updating type declarations for functions in the same file that might be unrelated to my feature and silence the linter for files that were downstream of changes in my current file. These errors already existed in the codebase but are now being caught by the linter due to an import in a staged file, such as `main.py`.
 
 ---
 
