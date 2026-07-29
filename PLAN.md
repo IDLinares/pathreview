@@ -52,18 +52,72 @@ Files I expect to create:
 **Testing:**
 
 1. Create and run backend tests for the two new functions in `core/services/shared_service.py` to ensure they work as expected.
-2. Create and run frontend tests for the "Copy Link" button feature in `frontend/src/pages/__tests__/ReviewPage.test.tsx` to ensure the button works as expected and the page is rendered correctly.
+2. Create and run frontend tests for the "Copy Link" button feature on the review page and for the new public review page in `frontend/src/pages/__tests__/` to ensure the button works as expected and the page is renders as expected.
 3. Run `make test-unit` to ensure all other tests pass and the new feature did not brea anything unexpectedly.
 4. Run `make check-lint` to ensure all linting rules, formatting rules, and type checking rules are satisfied.
 
 ### Inputs & outputs
 
-What does your fix take as input? What should it produce or change?
+This is a full-stack feature with two flows.
+
+---
+
+**Flow 1 — Owner clicks "Copy Link"**
+
+**Entry point:** `handleCopyLink()` in `ReviewPage.tsx`
+→ calls `apiClient.createShareLink(reviewId: string)`
+→ `POST /reviews/{review_id}/share-link` (authenticated)
+→ `create_share_link(db, review_id, user_id) -> Review`
+
+| Case               | Input                                                                  | Output                                                                                                                     |
+| ------------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| No active link     | `review_id`, `user_id`, `review.share_token = None`                    | New token written to `review.share_token`, `share_token_expires_at = now + 30d`, committed; public URL copied to clipboard |
+| Active link exists | `review_id`, `user_id`, `review.share_token = "abc"`, expiry in future | Same token returned, no DB write; public URL copied to clipboard                                                           |
+| Expired link       | `review_id`, `user_id`, `review.share_token = "old"`, expiry in past   | New token replaces old one, committed; new public URL copied to clipboard                                                  |
+| Non-owner          | `review_id`, wrong `user_id`                                           | `ValueError` in service → `404` from endpoint                                                                              |
+
+---
+
+**Flow 2 — Recipient opens public link**
+
+**Entry point:** `PublicReviewPage.tsx` mounts with token from URL params
+→ calls `apiClient.getPublicReview(token: string)` (no auth header)
+→ `GET /public/reviews/{token}` (unauthenticated)
+→ `get_public_review(db, token) -> Review`
+
+| Case          | Input                                       | Output                                                                        |
+| ------------- | ------------------------------------------- | ----------------------------------------------------------------------------- |
+| Valid token   | `token`, `share_token_expires_at` in future | Read-only review rendered in `PublicReviewPage`                               |
+| Expired token | `token`, `share_token_expires_at` in past   | `ValueError` in service → `410 Gone` from endpoint → error shown to recipient |
+| Unknown token | `token` not found in Review table           | `LookupError` in service → `404` from endpoint                                |
+
+**Tests already written:**
+
+- `tests/unit/test_share_service.py` — covers all service-layer cases for both flows
+- `frontend/src/test/ReviewPage.test.tsx` — covers the "Copy Link" button and clipboard behavio
 
 ### Risks & unknowns
 
-What could go wrong? What are you still unsure about?
+1. The link is still accessible after the expiration date, so tokens are not truly "expired" after 30 days.
+   - I will make sure that once the token expires, the link should not longer be accessible and an error should be shown to the recipient.
+
+2. The share button that I am replacing may be wanted for something else in the future.
+   - I am replacing it with a "Copy Link" button instead since it currently copies the URL to the clipboard that cannot be shared or accessed by anyone besides the owner, so it seems redundant.
+
+3. The link is not public by default, so it is still inaccessible to anyone besides the owner.
+   - I will make sure that if a token is generated and the link is copied, any recipients of the link will be able to access the public review summary.
+   - No authorization headers should be required for the public review page like the other endpoints in the api.
+   - The public route should also not be wrapped in a ProtectedRoute since it is not protected unlike the other existing pages.
+
+4. Token generation might not be secure or it could be guessable.
+   - I will make sure to use a secure random token generation algorithm (such as Python's secrets.token_urlsafe(16))
 
 ### Edge cases
 
-What inputs or states should your fix handle gracefully?
+1. The link should not be accessible on or after the expiration date.
+   - The token should no longer work to access the public review summary after 30 days.
+   - A new token needs to be generated by the owner of the review summary to access a new public review summary.
+
+2. Only one active token can be generated per review summary.
+   - Clicking the "Copy Link" button multiple times should not generate a new token.
+   - A link to the already generated public review summary with the same token should be added to the clipboard.
