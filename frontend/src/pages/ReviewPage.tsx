@@ -43,7 +43,7 @@ export const ReviewPage: React.FC = () => {
       setCopySuccess(true)
       setTimeout(() => setCopySuccess(false), 2000)
     } catch (err) {
-      setCopyError(err instanceof Error ? err.message : 'Failed to copy link')
+      setCopyError('Failed to generate share link')
     } finally {
       setIsCopying(false)
     }

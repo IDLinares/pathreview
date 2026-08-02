@@ -15,7 +15,7 @@ import { ReviewPage } from '../ReviewPage';
 
 // --- Module mocks ---
 
-vi.mock('../hooks/useReviewStatus', () => ({
+vi.mock('../../hooks/useReviewStatus', () => ({
 	useReviewStatus: vi.fn(() => ({
 		review: null,
 		isPolling: true,
@@ -23,7 +23,7 @@ vi.mock('../hooks/useReviewStatus', () => ({
 	})),
 }));
 
-vi.mock('../services/api', () => ({
+vi.mock('../../services/api', () => ({
 	apiClient: {
 		getReview: vi.fn(),
 		createShareLink: vi.fn(),
