@@ -52,16 +52,21 @@ Since this is a full-stack feature, some changes have caused linter errors and w
 
 ### Check-in 2 (end of week)
 
-**PR link:** [link to your submitted pull request]
+**PR link:** [PR link](https://github.com/ascherj/pathreview/pull/597)
 
-**Branch:** [the branch name you worked on, e.g. `fix/123-short-description`]
+**Branch:** feat/101-add-copy-link-button
 
 **What you built:**
-[1–3 sentences summarizing what your fix does and how it works]
+
+The existing "Share" button on the review page copied `window.location.href` to the clipboard — an authenticated URL that only the owner could access. This feature replaces it with a "Copy Link" button that calls a new backend endpoint to generate a time-limited, publicly accessible share token. Clicking the button writes a public URL (`/public/reviews/<token>`) to the clipboard that anyone can open to access a read-only summary of the review without logging in. Tokens are valid for 30 days with expired tokens returing a 410 Gone response with a clear message to the recipient. A new PublicReviewPage renders the review in a self-contained read-only layout with no navigation or action buttons.
 
 **Tests added or updated:**
-[Which test files did you touch? What do they cover?]
 
-**Self-review confirmation:** [ ] make check passes [ ] make test-unit passes
+- `tests/unit/test_share_service.py` — 11 unit tests covering both service functions (generating and retrieving the share link) across all token states (no token, valid token, expired token, non-owner)
+- `frontend/src/pages/__tests__/ReviewPage.test.tsx` — updated mock paths from '../' to '../../' to correctly intercept imports; 7 tests covering the Copy Link button addition to the review page (happy path + edge cases)
 
-**Draft PR feedback received from:** [name or Slack handle, or "none"]
+**Self-review confirmation:** [x] make check passes [x] make test-unit passes
+
+**Draft PR feedback received from:**
+
+none
