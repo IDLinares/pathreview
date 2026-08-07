@@ -70,3 +70,43 @@ The existing "Share" button on the review page copied `window.location.href` to 
 **Draft PR feedback received from:**
 
 none
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [x] Yes [ ] No — still awaiting review
+
+**Summary of feedback:**
+
+The reviewer comments that I correctly identified the security gap with the old "Share" button as it copied an authenticated URL to the clipboard with no real sharing capabilities. The judgemnt call on using error codes 410 vs 404 for expired vs unknown tokens is also correct HTTP sematics. They also agreed on the fields I excluded from the schema for the public review summary as well as the flags I made for the adjacent fixes I made in my PR to allow it to go through (such as the "silent" mypy workaround for the linting errors). Overall, the reviewer states the full-stack feature is solidly implemented and well-tested.
+
+**How you responded:**
+
+I thanked the reviewer for their feedback (PRs are not actually going to be merged for this project, but the feedback seems like the PR would likely have been merged).
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+
+The hardest part was making sure all of the tests were passing and that the linter was not complaining about any of the changes I made, especially since I made changes across both the front and backend. With many files being touched, it was crucial to make sure all conventions were being followed and that I was not introducing any new linting errors.
+
+**What did you learn about working in a large codebase?**
+
+When working in a well established codebase, it takes some time to get used to the patterns and convention of the codebase, especially if I already have my own habits and preferences for tools or setup. The more familiar you are with the codebase, the more you can take advantage of the tools and features that are already in place.
+
+**How did AI tools help — and where did they fall short?**
+
+AI tools were most helpful in explaining different parts of the codebase and how they were relevant to the feature I was working on, as well as for adjusting any functions or code that I wrote to match the conventions of the codebase.
+
+I did need to make adjustments to the AI tool's suggestions to make sure it followed my idea of what a "read-only" review summary should look like. I adjusted the AI tool's output to make sure all the texts for the "read-only" summary was already open and visible, instead of in interactive dropdowns like on the authenticated review page.
+
+**What would you do differently if you started over?**
+
+If I started over, I would plan out my test files and cases more thoroughly before writing any code. I do prefer following a test-driven development approach, so I had written tests first in this case, but I ended up changing my implmentation of the updated schema for the Review model. I then had to go back and update the tests to match the new schema or they would have continuted to fail.
+
+**What are you most proud of from this module?**
+
+I successfully navigated an unfamiliar codebase and implemented a full-stack feature that was well-tested and well-documented. I also received positive feedback from the reviewer and did not encounter any major issues with the codebase or the feature.
